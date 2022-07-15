@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gabri\\Documents\\CursoCSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {}
+    "C:\\Users\\gabriel.santos\\Documents\\CSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gabri\\Documents\\CursoCSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {
+    "C:\\Users\\gabriel.santos\\Documents\\CSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gabri\\Documents\\CursoCSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
+        "projectUniqueName": "C:\\Users\\gabriel.santos\\Documents\\CSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
         "projectName": "APICatalogo",
-        "projectPath": "C:\\Users\\Gabri\\Documents\\CursoCSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
-        "packagesPath": "C:\\Users\\Gabri\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gabri\\Documents\\CursoCSharp\\APICatalogo\\APICatalogo\\obj\\",
+        "projectPath": "C:\\Users\\gabriel.santos\\Documents\\CSharp\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
+        "packagesPath": "C:\\Users\\gabriel.santos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gabriel.santos\\Documents\\CSharp\\APICatalogo\\APICatalogo\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Gabri\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\gabriel.santos\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

@@ -477,6 +477,36 @@ public async Task<ActionResult<Produto>> GET(int id){
 5. `FromBody` - Vincula os dados a partir do Body do request
 6. `FromServices` - Vincula o valor especificado à implementação que foi configurada no seu container de injeção de dependência.
 
+### Data Annotations
+
+O namespace `System.ComponentModel.DataAnnotations` fornece classes de atributos que são usados para realizar a validação dos dados.
+
+Os atributos _Data Annotations_ permitem aplicar a validação no modelo de domínio definindo atributos.
+
+Os critérios de validação são definidos em um lugar (Model) e são aplicados onde o modelo for usado.
+
+**Como?**
+
+Quando os parâmetros do Model são usados nas Actions, ao popular o objeto do modelo usando os dados do request, o framework verifica se o objeto é válido com base nos atributos _Data Annotations_ definidos nas propriedades do modelo.
+
+### Validação do modelo
+
+- Validação por atributos: Data Annotations
+- Model State: Representa erros do Model Binding e da validação do modelo
+- Validação do Modelo: Ocorre após o Model Binding e relata erros nos quais os dados não estão em conformidade com as regras de negócio
+- O atributo [ApiController] faz a verificação automaticamente se o ModelState é válido e responde com um HTTP 400 com detalhes dos problemas
+- Podemos repetir a validação manualmente usando o método TryValidateModel(model)
+- Realizamos a validação usando atributos pré-definidos
+
+1. Criar atributos customizados
+   - O seu foco é validar um propriedade
+   - Pode ser reutilizada em diversos modelos e propriedades
+2. Implementar _IValidatableObject_ no seu modelo
+   - Pode acessar todas as propriedades do modelo e realizar uma validação mais complexa.
+   - Não pode ser reutilizada em outros modelos
+
+
+
 ## Minimal API's
 
 As Minimals API's usam os novos recursos do C# como *Global using* e instruções de nível superior, de forma a otimizar a experiência da inicialização do aplicativo.
