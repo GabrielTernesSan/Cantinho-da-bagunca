@@ -505,7 +505,143 @@ Quando os parâmetros do Model são usados nas Actions, ao popular o objeto do m
    - Pode acessar todas as propriedades do modelo e realizar uma validação mais complexa.
    - Não pode ser reutilizada em outros modelos
 
+### Middleware
 
+Middleware é um software que fica entre um sistema operacional e os aplicativos executados nele. Funcionando essencialmente como uma camada de tradução oculta, o middleware permite a comunicação e o gerenciamento de dados para aplicativos distribuídos. Às vezes, é chamado de encanamento, pois conecta dois aplicativos para que dados e bancos de dados possam ser facilmente transmitidos entre o “pipe”. O uso de middleware permite que os usuários realizem solicitações como enviar formulários em um navegador da Web ou permitir que o servidor da Web retorne páginas da Web dinâmicas com base no perfil de um usuário.
+
+#### Ordem (Dentro da classe Startup)
+
+1. Authentication: Habilita a funcionalidade de realizar a autenticação do usuário;
+2. Authorization: Habilita a funcionalidade de delegar acesso a um recurso conforme o perfil do usuário;
+3. MVC: Define o mapeamento e o envio do Request para os controladores.
+
+### Modelo de configuração
+
+A configuração de aplicativos na ASP.NET Core se baseia em uma lista de pares chave-valor estabelecidos por provedores de configuração.
+
+Os provedores de configuração leem os dados de configuração em pares chave-valor de várias fontes de configuração.
+
+- Arquivos no formato JSON, XML, INI, Texto, etc.
+- Variáveis de ambiente.
+- Argumentos da linha de comando.
+- Uma coleção na memória.
+- Provedores personalizados.
+- Arquivos de configuração diversos.
+
+#### Ler informações de configuração
+
+A leitura das informações dos arquivos de configuração é fornecido pelo framework através do serviço `IConfiguration`.
+
+E podemos utilizar a injeção de dependência para solicitar o serviço `IConfiguration` que já está configurado por padrão.
+
+### Filtros
+
+Os filtros são atributos anexados às classes ou métodos dos controladores que injetam lógica extra ao processamento da requisição e permitem a implementação de funcionalidades relacionadas a autorização, exception, log e cache de forma simples e elegante.
+
+Eles permitem executar um código personalizado antes de executar um método Action.
+
+Permitem também realizar tarefas repetitivas comuns a métodos Actions e são chamados em certos estágios do pipeline.
+
+#### Atuação
+
+Os filtros são executados dentro do pipeline de invocação das Actions do fluxo de requisição HTTP, às vezes chamado de pipeline de filtros.
+
+O pipeline de filtros é executado após o framework selecionar a Action a ser executada.
+
+#### Tipos
+
+- **Authorization**: Determina se o usuário está autorizado no request atual. São executados primeiro.
+- **Resource**: Podem executar código antes e depois do resto do filtro ser executado. Tratam do request após a autorização e executam antes do model binding ocorrer.
+- **Action**: Executam o código imediatamente antes e depois do método Action do controlador ser chamado.
+- **Exception**: São usados para manipular exceções ocorridas antes de qualquer coisa ser escrita no corpo da resposta.
+- **Result**: Executam o código antes ou depois da execução dos resultados das Actions individuais do controlador.
+
+#### Implementação Síncrona
+
+Os filtros síncronos que executam código antes e depois do estágio do pipeline definem os métodos `OnStageExecuting` e `OnStageExecuted`.
+
+`````c#
+public class CustomActionFilter : IActionFilter {
+    public void OnStageExecuting(ActionExecutingContext context){
+        //Código: antes que a action executa
+    }
+    public void OnStageExecuted(ActionExecutedContext context){
+        //Código: depois que a action executa
+    }
+}
+`````
+
+#### Implementação Assíncrona
+
+Os filtros assíncronos herdam de `IAsyncActionFilter` e são definidos com um único método: `OnStageExecutionAsync` que sua um `FilterTypeExecutingContext` e o delegate `FilterTypeExecutionDelegate` para executar o estágio do pipeline do filtro.
+
+``````C#
+public class CustomAsyncActionFilter: IAsyncActionFilter {
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next){
+        //Código: antes que a action executa
+        await next();
+        //Código: depois que a action executa
+    }
+}
+``````
+
+#### Escopo e ordem de execução
+
+Um filtro pode ser adicionado ao pipeline em um dos três escopos:
+
+1. Pelo método Action;
+2. Pela classe do controlador;
+3. Globalmente (é aplicado a todos os controladores e actions);
+
+A ordem padrão de execução é a seguinte:
+
+1. Filtro global é aplicado primeiro;
+2. Depois o filtro de nível de classe é aplicado;
+3. Finalmente, o filtro de nível de método é aplicado.
+
+### Tratamento de erros global com Middleware
+
+Podemos usar o middleware `UseExceptionHandler` para realizar o tratamento de exceções.
+
+Ele pode ser usado para manipular exceções globalmente e obter todos os detalhes do objeto `Exeption` (rastreamento de pilha, exceção interna, mensagem, etc.)
+
+#### Como?
+
+1. Criar uma classe de domínio para representar os detalhes dos erros: `ErrorDatails`
+2. Criar uma classe estática com um método estático que recebe como parâmetro `IApplicationBuilder`
+3. Neste método vamos usar o middleware `UseExceptionHandler` onde vamos configurar o tratamento dos erros
+4. Habilitar o uso do método estático para tratar erros globalmente no método `Configure()` da classe Startup
+
+### Log de dados e Logging
+
+Log de dados é um arquivo gerado por um software para descrever eventos sobre o seu funcionamento, utilização por usuários ou interação com outros sistemas sendo incrementado com o tempo com informações que permitem detectar problemas de funcionamento, segurança e acessibilidade.
+
+Para obter um log de dados realizamos o registro em log ou logging.
+
+O registro em log (logging) é um recurso essencial em aplicativos para detectar ou investigar problemas e analizar seu comportamento em geral.
+
+### Logging na ASP .NET Core
+
+A ASP.NET Core dá suporte a uma API de Logging ou registro de atividades em log que funciona com uma variedade de provedores de logs.
+
+Os provedores internos permitem que você envie logs para um ou mais destinos e você também pode de conectar a uma estrutra de registros de log de terceiros como Log4Net, NLog e Elmah.
+
+**Níveis de Log**
+
+| Critical        | Logs que descrevem uma falha de sistema que requer atenção imediata. |
+| --------------- | ------------------------------------------------------------ |
+| **Debug**       | Logs que são usados para investigação interativa durante o desenvolvimento. |
+| **Error**       | Logs que destacam quando o fluxo atual de execução é interrompido devido a uma falha. |
+| **Information** | Registros que rastreiam o fluxo geral do aplicativo.         |
+| **None**        | Especifica que uma categoria de log não deve gravar nenhuma mensagem. |
+| **Trace**       | Logs que contêm as mensagens mais detalhadas. Essas mensagens podem conter dados confidenciais do aplicativo. Essas mensagens estão desativadas por padrão e nunca devem ser ativadas em um ambiente de produção. |
+| **Warning**     | Logs que destacam um evento anormal ou inesperado no fluxo do aplicativo, mas não fazem com que a execução do aplicativo pare. |
+
+Interfaces de Microsoft.Extensions.Logging:
+
+- `ILoggingFactory` - É uma factory interface para criar uma instância apropriada do tipo `ILogger` e também para adicionar uma instância `ILoggerProvider`.
+- `ILoggingProvider` - Gerencia e cria o registrador apropriado especificado pela categoria de registro.
+- `ILogger` - Inclui métodos para logging de registros subjacentes.
 
 ## Minimal API's
 
